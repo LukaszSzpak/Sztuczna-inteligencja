@@ -1,7 +1,7 @@
 import unittest
 
-from direction import Direction
-from segment import Segment
+from Cwiczenie_1.direction import Direction
+from Cwiczenie_1.segment import Segment
 
 
 class UnitTests(unittest.TestCase):

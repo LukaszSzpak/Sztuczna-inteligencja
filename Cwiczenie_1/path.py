@@ -1,7 +1,7 @@
 import random
 
-from direction import Direction
-from segment import *
+from Cwiczenie_1.direction import Direction
+from Cwiczenie_1.segment import *
 
 
 class Path:
