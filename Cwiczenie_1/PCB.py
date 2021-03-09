@@ -15,7 +15,11 @@ class PCB:
         self.act_number = 1
 
     def calculate_and_get_quality(self):
-        pass  # TODO: implement fitness function
+        if not self.path_list:
+            return None
+        if self.score:
+            return self.score
+        return sum(path.get_sum_of_segments() for path in self.path_list)
 
     def make_random_solution(self):
         self.erase_data()
@@ -32,15 +36,13 @@ class PCB:
 
                 path.add_random_segment(available_directions)
                 self.add_point_to_matrix(path.actual_point)
-
             self.act_number += 1
-
-        print(self.matrix)
         return True
 
     def erase_data(self):
         self.matrix = np.zeros([self.width, self.height], dtype=int)
         self.path_list = []
+        self.score = None
 
     def add_points_to_matrix(self):
         self.act_number = 1

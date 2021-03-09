@@ -51,3 +51,6 @@ class Path:
             self.add_segment((Segment(Direction.down, 1)))
             return True
         return False
+
+    def get_sum_of_segments(self):
+        return sum(seg.length for seg in self.segments_list) + 1
