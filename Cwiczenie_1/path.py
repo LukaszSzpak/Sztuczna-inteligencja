@@ -13,8 +13,8 @@ class Path:
         self.segments_list = []
 
     def make_random_path(self):
-        directions = []
         while not self.is_done():
+            directions = []
             if self.end_point[0] - self.actual_point[0] > 0:
                 directions.append(Direction.right)
             elif self.end_point[0] - self.actual_point[0] < 0:

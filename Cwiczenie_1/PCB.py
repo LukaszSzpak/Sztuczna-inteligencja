@@ -1,3 +1,6 @@
+from math import inf
+from operator import add
+
 import numpy as np
 
 from Cwiczenie_1.direction import Direction
@@ -5,6 +8,12 @@ from Cwiczenie_1.path import Path
 
 
 class PCB:
+    LENGTH_MULTIPLIER = 1.0
+    CROSS_MULTIPLIER = 5.0
+    OUT_OF_PCB_MULTIPLIER = 10.0
+    ERROR_COST = float(inf)
+    MATRIX_OVERLAP = 10  # must be %2=0
+
     def __init__(self, points_list, width, height):
         self.path_list = None
         self.points_list = points_list
@@ -17,9 +26,47 @@ class PCB:
     def calculate_and_get_quality(self):
         if not self.path_list:
             return None
-        if self.score:
-            return self.score
-        return sum(path.get_sum_of_segments() for path in self.path_list)
+
+        length_cost = sum(path.get_sum_of_segments() for path in self.path_list) * PCB.LENGTH_MULTIPLIER
+        crossing_cost, out_pcb_cost = self.check_crossing_and_out_pcb()
+        crossing_cost *= PCB.CROSS_MULTIPLIER
+        out_pcb_cost *= PCB.OUT_OF_PCB_MULTIPLIER
+        self.score = length_cost + crossing_cost + out_pcb_cost
+        return self.score
+
+    def check_crossing_and_out_pcb(self):
+        self.matrix = np.zeros([self.width + PCB.MATRIX_OVERLAP, self.height + PCB.MATRIX_OVERLAP], dtype=int)
+        cross_counter = 0
+        out_counter = 0
+        pcb_overlap_half = int(PCB.MATRIX_OVERLAP / 2)
+        act_counter = 1
+
+        for path in self.path_list:
+            act_point = list(map(add, path.start_point, [pcb_overlap_half, pcb_overlap_half]))
+
+            for segment in path.segments_list:
+                for move in range(segment.length):
+                    if act_point[0] < pcb_overlap_half or act_point[0] > pcb_overlap_half + self.width:
+                        out_counter += 1
+                    if act_point[1] < pcb_overlap_half or act_point[1] > pcb_overlap_half + self.height:
+                        out_counter += 1
+
+                    if segment.direction == Direction.up or segment.direction == Direction.down:
+                        act_point[1] += segment.direction.value
+                    else:
+                        act_point[0] += segment.direction.value + 10
+                    try:
+                        if self.matrix[act_point[0]][act_point[1]] != 0:
+                            cross_counter += 1
+                        self.matrix[act_point[0]][act_point[1]] = act_counter
+                    except IndexError:
+                        return PCB.ERROR_COST, PCB.ERROR_COST
+
+            self.matrix[path.end_point[0] + pcb_overlap_half][path.end_point[1] + pcb_overlap_half] = act_counter
+            self.matrix[path.start_point[0] + pcb_overlap_half][path.start_point[1] + pcb_overlap_half] = act_counter
+            act_counter += 1
+
+        return cross_counter, out_counter
 
     def make_random_simple_solution(self):
         self.erase_data()

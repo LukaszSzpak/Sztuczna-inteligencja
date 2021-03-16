@@ -6,7 +6,7 @@ from Cwiczenie_1.dataLoading import DataLoading
 COUNTER = 1000
 
 if __name__ == '__main__':
-    data_load = DataLoading("lab1_problemy_testowe/zad0.txt")
+    data_load = DataLoading("lab1_problemy_testowe/zad1.txt")
     data = data_load.get_data()
     pcb = PCB(data[1], data[0][0], data[0][1])
 
@@ -27,4 +27,5 @@ if __name__ == '__main__':
     # print(pcb.calculate_and_get_quality())
 
     pcb.make_random_simple_solution()
+    print(pcb.calculate_and_get_quality())
     print("Done")
