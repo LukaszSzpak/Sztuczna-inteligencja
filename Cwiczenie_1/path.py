@@ -12,6 +12,21 @@ class Path:
         self.actual_point = copy.deepcopy(start_point)
         self.segments_list = []
 
+    def make_random_path(self):
+        directions = []
+        while not self.is_done():
+            if self.end_point[0] - self.actual_point[0] > 0:
+                directions.append(Direction.right)
+            elif self.end_point[0] - self.actual_point[0] < 0:
+                directions.append(Direction.left)
+
+            if self.end_point[1] - self.actual_point[1] > 0:
+                directions.append(Direction.up)
+            elif self.end_point[1] - self.actual_point[1] < 0:
+                directions.append(Direction.down)
+
+            self.add_random_segment(directions)
+
     def add_random_segment(self, available_directions):
         if not self.check_next_to_end():
             new_segment = Segment(random.choice(available_directions), 1)

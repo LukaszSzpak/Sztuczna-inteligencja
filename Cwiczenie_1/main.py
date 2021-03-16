@@ -3,7 +3,7 @@ import copy
 from Cwiczenie_1.PCB import PCB
 from Cwiczenie_1.dataLoading import DataLoading
 
-COUNTER = 100000
+COUNTER = 1000
 
 if __name__ == '__main__':
     data_load = DataLoading("lab1_problemy_testowe/zad0.txt")
@@ -21,7 +21,10 @@ if __name__ == '__main__':
     # print(best_solution.matrix)
     # print(best_score)
 
-    while not pcb.make_random_solution():
-        pcb.calculate_and_get_quality()
-    print(pcb.matrix)
-    print(pcb.calculate_and_get_quality())
+    # while not pcb.make_random_solution():
+    #     pcb.calculate_and_get_quality()
+    # print(pcb.matrix)
+    # print(pcb.calculate_and_get_quality())
+
+    pcb.make_random_simple_solution()
+    print("Done")

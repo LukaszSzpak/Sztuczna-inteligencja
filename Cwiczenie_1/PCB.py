@@ -21,6 +21,14 @@ class PCB:
             return self.score
         return sum(path.get_sum_of_segments() for path in self.path_list)
 
+    def make_random_simple_solution(self):
+        self.erase_data()
+        self.add_points_to_matrix()
+        self.add_points_to_paths()
+
+        for path in self.path_list:
+            path.make_random_path()
+
     def make_random_solution(self):
         self.erase_data()
         self.add_points_to_matrix()
