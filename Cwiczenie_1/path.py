@@ -6,7 +6,11 @@ from Cwiczenie_1.segment import *
 
 
 class Path:
-    ADD_LENGTH_LEVEl = 70  # 1 - 100
+    ADD_LENGTH_LEVEl = 50  # 1 - 100
+    SPLIT_LEVEL = 50  # 1 - 100
+    ADD_OPPOSITE = 50  # 1 - 100
+    SUB_OPPOSITE = 50  # 1 - 100
+    MAX_LENGTH_OF_NEW_SEGMENT = 5
 
     def __init__(self, start_point, end_point):
         self.start_point = start_point
@@ -30,15 +34,29 @@ class Path:
             self.add_random_segment(directions)
 
     def mutate(self):
-        pointer1 = random.randint(0, len(self.segments_list) - 1)
-        pointer2 = random.randint(0, len(self.segments_list) - 1)
-        segment = self.segments_list[pointer1]
+        if random.randint(0, 100) < Path.SPLIT_LEVEL:
+            pointer = random.randint(0, len(self.segments_list) - 1)
+            segment = self.segments_list[pointer]
+            if segment.length > 1:
+                seg = Segment(segment.direction, random.randint(1, segment.length))
+                segment.length -= seg.length
+                self.segments_list.insert(random.randint(0, len(self.segments_list) - 1), seg)
 
-        if random.randint(0, 100) < Path.ADD_LENGTH_LEVEl:
-            segment.length += 1
-            self.segments_list.insert(pointer2, segment.get_segment_with_opposite_direction())
-            self.rebuild_path()
-        else:
+        elif random.randint(0, 100) < Path.ADD_OPPOSITE:
+            length = random.randint(0, Path.MAX_LENGTH_OF_NEW_SEGMENT)
+            chance = random.randint(0, 100)
+            if chance < 25:
+                self.add_two_opposite_segments(length, Direction.up, Direction.down)
+            if chance < 50:
+                self.add_two_opposite_segments(length, Direction.down, Direction.up)
+            if chance < 75:
+                self.add_two_opposite_segments(length, Direction.left, Direction.right)
+            if chance < 100:
+                self.add_two_opposite_segments(length, Direction.right, Direction.left)
+
+        elif random.randint(0, 100) < Path.SUB_OPPOSITE:
+            segment = self.segments_list[random.randint(0, len(self.segments_list) - 1)]
+
             if segment.direction == Direction.up:
                 self.sub_length_opposite_directions(segment, Direction.down)
             elif segment.direction == Direction.down:
@@ -47,24 +65,51 @@ class Path:
                 self.sub_length_opposite_directions(segment, Direction.right)
             elif segment.direction == Direction.right:
                 self.sub_length_opposite_directions(segment, Direction.left)
-            self.rebuild_path()
+
+        self.rebuild_path()
+
+    def add_two_opposite_segments(self, length, direction1, direction2):
+        self.segments_list.insert(random.randint(0, len(self.segments_list) - 1), Segment(direction1, length))
+        self.segments_list.insert(random.randint(0, len(self.segments_list) - 1), Segment(direction2, length))
 
     def sub_length_opposite_directions(self, segment, direction):
         for seg in self.segments_list:
             if seg.direction == direction:
                 segment.length -= 1
                 seg.length -= 1
+                return
 
     def rebuild_path(self):
-        for index in range(start=0, stop=len(self.segments_list) - 1, step=1):
-            if self.segments_list[index].length == 0:
-                del self.segments_list[index]
-                self.rebuild_path()
+        for index in reversed(range((len(self.segments_list) - 1))):
+            if len(self.segments_list) > 1:
+                if self.segments_list[index].length == 0:
+                    del self.segments_list[index]
+                    return
+                elif self.segments_list[index].direction == self.segments_list[index + 1].direction:
+                    self.segments_list[index].length += self.segments_list[index + 1].length
+                    del self.segments_list[index + 1]
+                    return
+                elif self.segments_list[index].direction == Direction.up and \
+                        self.segments_list[index + 1].direction == Direction.down:
+                    self.check_lengths_and_delete(index)
+                    return
+                elif self.segments_list[index].direction == Direction.down and \
+                        self.segments_list[index + 1].direction == Direction.up:
+                    self.check_lengths_and_delete(index)
+                    return
+                elif self.segments_list[index].direction == Direction.left and \
+                        self.segments_list[index + 1].direction == Direction.right:
+                    self.check_lengths_and_delete(index)
+                    return
+                elif self.segments_list[index].direction == Direction.right and \
+                        self.segments_list[index + 1].direction == Direction.left:
+                    self.check_lengths_and_delete(index)
+                    return
 
-            if self.segments_list[index].direction == self.segments_list[index + 1].direction:
-                self.segments_list[index].length += self.segments_list[index + 1].length
-                del self.segments_list[index + 1]
-                self.rebuild_path()
+    def check_lengths_and_delete(self, index):
+        if self.segments_list[index].length == self.segments_list[index + 1].length:
+            del self.segments_list[index]
+            del self.segments_list[index]
 
     def add_random_segment(self, available_directions):
         if not self.check_next_to_end():

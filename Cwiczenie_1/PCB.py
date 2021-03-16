@@ -1,6 +1,7 @@
 from math import inf
 from operator import add
 import random
+import copy
 
 import numpy as np
 
@@ -10,9 +11,9 @@ from Cwiczenie_1.path import Path
 
 class PCB:
     LENGTH_MULTIPLIER = 1.0
-    CROSS_MULTIPLIER = 5.0
-    OUT_OF_PCB_MULTIPLIER = 10.0
-    ERROR_COST = float(inf)
+    CROSS_MULTIPLIER = 10.0
+    OUT_OF_PCB_MULTIPLIER = 20.0
+    ERROR_COST = 100000
     MATRIX_OVERLAP = 10  # must be %2=0
 
     MUTATION_PATH_LEVEL = 70  # 1-100
@@ -73,16 +74,16 @@ class PCB:
 
     def mutation(self):
         for path in self.path_list:
-            if random.randint(0, 100) > PCB.MUTATION_PATH_LEVEL:
+            if random.randint(0, 100) < PCB.MUTATION_PATH_LEVEL:
                 path.mutate()
 
     def crossover(self, pcb1):
         result_pcb = PCB(self.points_list, self.width, self.height)
         for path_index in range(len(self.path_list)):
             if random.randint(0, 100) < 50:
-                result_pcb.path_list.append(self.path_list[path_index])
+                result_pcb.path_list.append(copy.deepcopy(self.path_list[path_index]))
             else:
-                result_pcb.path_list.append(pcb1.path_list[path_index])
+                result_pcb.path_list.append(copy.deepcopy(pcb1.path_list[path_index]))
 
         return result_pcb
 
