@@ -1,5 +1,6 @@
 from math import inf
 from operator import add
+import random
 
 import numpy as np
 
@@ -14,8 +15,10 @@ class PCB:
     ERROR_COST = float(inf)
     MATRIX_OVERLAP = 10  # must be %2=0
 
+    MUTATION_PATH_LEVEL = 70  # 1-100
+
     def __init__(self, points_list, width, height):
-        self.path_list = None
+        self.path_list = []
         self.points_list = points_list
         self.height = height
         self.width = width
@@ -67,6 +70,21 @@ class PCB:
             act_counter += 1
 
         return cross_counter, out_counter
+
+    def mutation(self):
+        for path in self.path_list:
+            if random.randint(0, 100) > PCB.MUTATION_PATH_LEVEL:
+                path.mutate()
+
+    def crossover(self, pcb1):
+        result_pcb = PCB(self.points_list, self.width, self.height)
+        for path_index in range(len(self.path_list)):
+            if random.randint(0, 100) < 50:
+                result_pcb.path_list.append(self.path_list[path_index])
+            else:
+                result_pcb.path_list.append(pcb1.path_list[path_index])
+
+        return result_pcb
 
     def make_random_simple_solution(self):
         self.erase_data()
