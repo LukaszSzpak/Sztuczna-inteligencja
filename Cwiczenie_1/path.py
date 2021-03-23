@@ -9,7 +9,7 @@ class Path:
     ADD_LENGTH_LEVEl = 30  # 1 - 100
     SPLIT_LEVEL = 30  # 1 - 100
     ADD_OPPOSITE = 30  # 1 - 100
-    SUB_OPPOSITE = 50  # 1 - 100
+    SUB_OPPOSITE = 80  # 1 - 100
     MAX_LENGTH_OF_NEW_SEGMENT = 5
 
     def __init__(self, start_point, end_point):

@@ -6,10 +6,11 @@ import matplotlib.pyplot as plt
 from Cwiczenie_1.PCB import PCB
 from Cwiczenie_1.dataLoading import DataLoading
 
-COUNTER = 30
-PCB_POPULATION = 10
-CROSSOVER_POPULATION = 20
-FIRST_POPULATION = 20
+COUNTER = 300
+PCB_POPULATION = 20
+CROSSOVER_POPULATION = 40
+FIRST_POPULATION = 100
+ROULETTE_TOURNAMENT_PROB = 60
 
 
 def roulette(pcb_list):
@@ -80,6 +81,9 @@ def show_plot(cost_list):
         count_list.append(counter)
         counter += 1
 
+    print("Najlepszy wynik: ", min(min_list))
+    print("Najgorszy wynik: ", max(max_list))
+    print("Średnia: ", sum(avg_list)/len(avg_list))
     plt.plot(count_list, min_list, label="min")
     plt.plot(count_list, max_list, label="max")
     plt.plot(count_list, avg_list, label="avg")
@@ -116,7 +120,7 @@ if __name__ == '__main__':
         # print("Iter: ", i, " Cost: ", cost)
         costs_list.append(population_data(pcbs_list))
 
-        if random.randint(0, 100) < 50:
+        if random.randint(0, 100) < ROULETTE_TOURNAMENT_PROB:
             pcbs_list = roulette(pcbs_list)
         else:
             pcbs_list = tournament(pcbs_list)

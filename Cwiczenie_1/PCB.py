@@ -11,12 +11,13 @@ from Cwiczenie_1.path import Path
 
 class PCB:
     LENGTH_MULTIPLIER = 1.0
-    CROSS_MULTIPLIER = 10.0
-    OUT_OF_PCB_MULTIPLIER = 20.0
+    CROSS_MULTIPLIER = 15.0
+    OUT_OF_PCB_MULTIPLIER = 30.0
     ERROR_COST = 100000
     MATRIX_OVERLAP = 100  # must be %2=0
 
-    MUTATION_PATH_LEVEL = 70  # 1-100
+    MUTATION_PATH_LEVEL = 30  # 1-100
+    CROSSOVER_LEVEL = 70  # 1-100
 
     def __init__(self, points_list, width, height):
         self.path_list = []
@@ -78,14 +79,16 @@ class PCB:
                 path.mutate()
 
     def crossover(self, pcb1):
-        result_pcb = PCB(self.points_list, self.width, self.height)
-        for path_index in range(len(self.path_list)):
-            if random.randint(0, 100) < 50:
-                result_pcb.path_list.append(copy.deepcopy(self.path_list[path_index]))
-            else:
-                result_pcb.path_list.append(copy.deepcopy(pcb1.path_list[path_index]))
+        if random.randint(0, 100) < PCB.CROSSOVER_LEVEL:
+            result_pcb = PCB(self.points_list, self.width, self.height)
+            for path_index in range(len(self.path_list)):
+                if random.randint(0, 100) < 50:
+                    result_pcb.path_list.append(copy.deepcopy(self.path_list[path_index]))
+                else:
+                    result_pcb.path_list.append(copy.deepcopy(pcb1.path_list[path_index]))
 
-        return result_pcb
+            return result_pcb
+        return copy.deepcopy(self)
 
     def make_random_simple_solution(self):
         self.erase_data()
