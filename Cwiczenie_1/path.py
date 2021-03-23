@@ -6,10 +6,10 @@ from Cwiczenie_1.segment import *
 
 
 class Path:
-    ADD_LENGTH_LEVEl = 80  # 1 - 100
+    ADD_LENGTH_LEVEl = 30  # 1 - 100
     SPLIT_LEVEL = 30  # 1 - 100
-    ADD_OPPOSITE = 80  # 1 - 100
-    SUB_OPPOSITE = 80  # 1 - 100
+    ADD_OPPOSITE = 30  # 1 - 100
+    SUB_OPPOSITE = 50  # 1 - 100
     MAX_LENGTH_OF_NEW_SEGMENT = 5
 
     def __init__(self, start_point, end_point):
@@ -42,7 +42,7 @@ class Path:
                 segment.length -= seg.length
                 self.segments_list.insert(random.randint(0, len(self.segments_list) - 1), seg)
 
-        elif random.randint(0, 100) < Path.ADD_OPPOSITE:
+        if random.randint(0, 100) < Path.ADD_OPPOSITE:
             length = random.randint(0, Path.MAX_LENGTH_OF_NEW_SEGMENT)
             chance = random.randint(0, 100)
             if chance < 25:
@@ -54,7 +54,7 @@ class Path:
             elif chance < 100:
                 self.add_two_opposite_segments(length, Direction.right, Direction.left)
 
-        elif random.randint(0, 100) < Path.SUB_OPPOSITE:
+        if random.randint(0, 100) < Path.SUB_OPPOSITE:
             segment = self.segments_list[random.randint(0, len(self.segments_list) - 1)]
 
             if segment.direction == Direction.up:
@@ -66,7 +66,7 @@ class Path:
             elif segment.direction == Direction.right:
                 self.sub_length_opposite_directions(segment, Direction.left)
 
-        #  self.rebuild_path()
+            self.rebuild_path()
 
     def add_two_opposite_segments(self, length, direction1, direction2):
         self.segments_list.insert(random.randint(0, len(self.segments_list) - 1), Segment(direction1, length))

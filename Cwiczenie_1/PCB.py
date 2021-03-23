@@ -14,7 +14,7 @@ class PCB:
     CROSS_MULTIPLIER = 10.0
     OUT_OF_PCB_MULTIPLIER = 20.0
     ERROR_COST = 100000
-    MATRIX_OVERLAP = 10  # must be %2=0
+    MATRIX_OVERLAP = 100  # must be %2=0
 
     MUTATION_PATH_LEVEL = 70  # 1-100
 
