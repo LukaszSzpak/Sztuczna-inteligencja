@@ -71,26 +71,37 @@ public class ColoringMap extends Constraint<Pair<Integer, Integer>, String>{
         return resultList;
     }
 
-    public static void main(String[] args) {
+    public static void runMultipleTimes() {
         List<String> colorList = Arrays.asList("red", "blue", "green", "yellow");
-        List<Pair<Integer, Integer>> variables = getRandomVariables(10, 15, 10);
-        Map<Pair<Integer, Integer>, List<String>> domains = new HashMap<>();
-
-        for (Pair<Integer, Integer> variable : variables) {
-            domains.put(variable, colorList);
-        }
-
-        ConstraintSatisfactionProblem<Pair<Integer, Integer>, String> csp = new ConstraintSatisfactionProblem<>(variables, domains);
+        List<Pair<Integer, Integer>> variables = getRandomVariables(8, 10, 6);
+        int loopIterations = variables.size() + getConstraintsList(variables).size();
         List<ColoringMap> constrainsList = getConstraintsList(variables);
 
-        for (ColoringMap coloringMap : constrainsList)
-            csp.addConstraint(coloringMap);
+        for (int i = 0; i < loopIterations; i++) {
+            Map<Pair<Integer, Integer>, List<String>> domains = new HashMap<>();
+            for (Pair<Integer, Integer> variable : variables) {
+                domains.put(variable, colorList);
+            }
 
-        Map<Pair<Integer, Integer>, String> solution = csp.backTrackingSearch();
-        if (solution == null) {
-            System.out.println("No solution found!");
-        } else {
-            System.out.println(solution);
+            ConstraintSatisfactionProblem<Pair<Integer, Integer>, String> csp = new ConstraintSatisfactionProblem<>(variables, domains);
+            Collections.shuffle(constrainsList);
+            for (ColoringMap c : constrainsList)
+                csp.addConstraint(c);
+
+            try {
+                Map<Pair<Integer, Integer>, String> solution = csp.backTrackingSearch();
+                if (solution != null)
+                    System.out.println(solution);
+            } catch (Exception e) {
+                System.out.println("Some error occurred!");
+            }
+
+            Collections.shuffle(variables);
         }
+    }
+
+    public static void main(String[] args) {
+        runMultipleTimes();
+
     }
 }

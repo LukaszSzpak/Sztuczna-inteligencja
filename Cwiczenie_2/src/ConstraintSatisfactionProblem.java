@@ -1,12 +1,9 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ConstraintSatisfactionProblem<V, D> {
-    private List<V> variables;
-    private Map<V, List<D>> domains;
-    private Map<V, List<Constraint<V, D>>> constraints;
+    private final List<V> variables;
+    private final Map<V, List<D>> domains;
+    private final Map<V, List<Constraint<V, D>>> constraints;
 
     public ConstraintSatisfactionProblem(List<V> variables, Map<V, List<D>> domains) {
         this.variables = variables;
@@ -62,4 +59,5 @@ public class ConstraintSatisfactionProblem<V, D> {
     public Map<V, D> backTrackingSearch() {
         return backTrackingSearch(new HashMap<>());
     }
+
 }
