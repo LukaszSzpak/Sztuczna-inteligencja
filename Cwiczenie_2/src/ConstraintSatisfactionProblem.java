@@ -5,7 +5,8 @@ public class ConstraintSatisfactionProblem<V, D> {
     private final List<V> variables;
     private final Map<V, List<D>> domains;
     private final Map<V, List<Constraint<V, D>>> constraints;
-    private final static String HEURISTIC = "first"; //[first, mostEdges]
+    private final static String VALUE_HEURISTIC = "first"; //[first, mostEdges]
+    private final static String DOMAIN_HEURISTIC = "leastUsed"; //[random, leastUsed]
 
 
     public ConstraintSatisfactionProblem(List<V> variables, Map<V, List<D>> domains) {
@@ -45,7 +46,7 @@ public class ConstraintSatisfactionProblem<V, D> {
         }
 
         V unassigned = getNextUnassignedVariable(assignment);
-        for (D value : domains.get(unassigned)) {
+        for (D value : getValuesList(domains.get(unassigned), assignment)) {
             Map<V, D> localAssignment = new HashMap<>(assignment);
             localAssignment.put(unassigned, value);
 
@@ -59,11 +60,42 @@ public class ConstraintSatisfactionProblem<V, D> {
         return null;
     }
 
+    private List<D> getValuesList(List<D> domains, Map<V, D> assignment) {
+        switch (DOMAIN_HEURISTIC) {
+            case "random": return getRandomValuesList(domains);
+            case "leastUsed": return getLeastUsedValuesList(domains, assignment);
+            default: throw new IllegalArgumentException("Wrong domain heuristic choice!");
+        }
+    }
+
+    private List<D> getRandomValuesList(List<D> domains) {
+        Collections.shuffle(domains);
+        return domains;
+    }
+
+    private List<D> getLeastUsedValuesList(List<D> domains, Map<V, D> assignment) {
+        Map<D, Integer> valuesWithCount = new HashMap<>();
+        for (D domain : domains)
+            valuesWithCount.put(domain, 0);
+
+        for (D domain : assignment.values())
+            valuesWithCount.merge(domain, 1, Integer::sum);
+
+        List<D> valuesList = new LinkedList<>();
+        while (!valuesWithCount.isEmpty()) {
+            D domain = Collections.min(valuesWithCount.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
+            valuesList.add(domain);
+            valuesWithCount.remove(domain);
+        }
+
+        return valuesList;
+    }
+
     private V getNextUnassignedVariable(Map<V, D> assignment) {
-        switch (ConstraintSatisfactionProblem.HEURISTIC) {
+        switch (VALUE_HEURISTIC) {
             case "first": return getFirstVariable(assignment);
             case "mostEdges": return getMostEdgesVariable(assignment);
-            default: throw new IllegalArgumentException("Wrong heuristic choice!");
+            default: throw new IllegalArgumentException("Wrong value heuristic choice!");
         }
     }
 
