@@ -6,7 +6,7 @@ public class ConstraintSatisfactionProblem<V, D> {
     private final Map<V, List<D>> domains;
     private final Map<V, List<Constraint<V, D>>> constraints;
     private final static String VALUE_HEURISTIC = "first"; //[first, mostEdges]
-    private final static String DOMAIN_HEURISTIC = "leastUsed"; //[random, leastUsed]
+    private final static String DOMAIN_HEURISTIC = "random"; //[random, leastUsed]
 
 
     public ConstraintSatisfactionProblem(List<V> variables, Map<V, List<D>> domains) {
@@ -59,6 +59,9 @@ public class ConstraintSatisfactionProblem<V, D> {
 
     private List<D> getAvailableDomains(V variable, Map<V, D> assignment) {
         List<D> resultList = getValuesList(this.domains.get(variable), assignment);
+        if (resultList == null || resultList.isEmpty())
+            return new ArrayList<>();
+
         for (D domain : assignment.values()) {
             Map<V, D> tempMap = new HashMap<V, D>(assignment);
             tempMap.put(variable, domain);
@@ -100,7 +103,7 @@ public class ConstraintSatisfactionProblem<V, D> {
 
     private List<D> getRandomValuesList(List<D> domains) {
         Collections.shuffle(domains);
-        return domains;
+        return new LinkedList<>(domains);
     }
 
     private List<D> getLeastUsedValuesList(List<D> domains, Map<V, D> assignment) {
