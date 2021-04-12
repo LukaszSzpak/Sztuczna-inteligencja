@@ -40,6 +40,36 @@ public class ConstraintSatisfactionProblem<V, D> {
         return true;
     }
 
+    private Map<V, D> forwardCheckingSearch(Map<V, D> assignment) {
+        if (assignment.size() == variables.size()) {
+            return assignment;
+        }
+
+        V unassigned = getNextUnassignedVariable(assignment);
+        if (unassigned == null)
+            return null;
+
+        List<D> valuesList = this.getAvailableDomains(unassigned, assignment);
+        if (valuesList.isEmpty())
+            return null;
+
+        assignment.put(unassigned, valuesList.get(0));
+        return forwardCheckingSearch(assignment);
+    }
+
+    private List<D> getAvailableDomains(V variable, Map<V, D> assignment) {
+        List<D> resultList = getValuesList(this.domains.get(variable), assignment);
+        for (D domain : assignment.values()) {
+            Map<V, D> tempMap = new HashMap<V, D>(assignment);
+            tempMap.put(variable, domain);
+
+            if(!consistent(variable, tempMap))
+                resultList.remove(domain);
+        }
+
+        return resultList;
+    }
+
     private Map<V, D> backTrackingSearch(Map<V, D> assignment) {
         if (assignment.size() == variables.size()) {
             return assignment;
@@ -121,5 +151,7 @@ public class ConstraintSatisfactionProblem<V, D> {
     public Map<V, D> backTrackingSearch() {
         return backTrackingSearch(new HashMap<>());
     }
-
+    public Map<V, D> forwardCheckingSearch() {
+        return forwardCheckingSearch(new HashMap<>());
+    }
 }
