@@ -1,6 +1,7 @@
 import javafx.util.Pair;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ColoringMap extends Constraint<Pair<Integer, Integer>, String>{
     public Pair<Integer, Integer> place1;
@@ -41,7 +42,7 @@ public class ColoringMap extends Constraint<Pair<Integer, Integer>, String>{
 
     public static List<Pair<Integer, Integer>> getRandomVariables(int mapX, int mapY, int howManyPlaces) {
         List<Pair<Integer, Integer>> resultsList = new LinkedList<>();
-        Random random = new Random();
+        Random random = new Random(1000);
 
         while (resultsList.size() < howManyPlaces) {
             int x = random.nextInt(mapX);
@@ -72,10 +73,11 @@ public class ColoringMap extends Constraint<Pair<Integer, Integer>, String>{
     }
 
     public static void runMultipleTimes() {
-        List<String> colorList = Arrays.asList("red", "blue", "green", "yellow");
-        List<Pair<Integer, Integer>> variables = getRandomVariables(8, 10, 6);
+        List<String> colorList = Arrays.asList("yellow", "red", "blue", "green");
+        List<Pair<Integer, Integer>> variables = getRandomVariables(30, 30, 2);
         int loopIterations = variables.size() + getConstraintsList(variables).size();
         List<ColoringMap> constrainsList = getConstraintsList(variables);
+        List<Map<Pair<Integer, Integer>, String>> solutionsList = new LinkedList<>();
 
         for (int i = 0; i < loopIterations; i++) {
             Map<Pair<Integer, Integer>, List<String>> domains = new HashMap<>();
@@ -83,25 +85,30 @@ public class ColoringMap extends Constraint<Pair<Integer, Integer>, String>{
                 domains.put(variable, colorList);
             }
 
-            ConstraintSatisfactionProblem<Pair<Integer, Integer>, String> csp = new ConstraintSatisfactionProblem<>(variables, domains);
+            ConstraintSatisfactionProblem<Pair<Integer, Integer>, String> csp =
+                    new ConstraintSatisfactionProblem<>(variables, domains);
             Collections.shuffle(constrainsList);
             for (ColoringMap c : constrainsList)
                 csp.addConstraint(c);
 
-            try {
-                Map<Pair<Integer, Integer>, String> solution = csp.backTrackingSearch();
-                if (solution != null)
-                    System.out.println(solution);
-            } catch (Exception e) {
-                System.out.println("Some error occurred!");
-            }
-
+            solutionsList.add(csp.backTrackingSearch());
             Collections.shuffle(variables);
         }
+
+//        solutionsList = solutionsList.stream().distinct().collect(Collectors.toList());
+//        for (Map<Pair<Integer, Integer>, String> solution : solutionsList) {
+//            if (solution != null)
+//                System.out.println(solution);
+//        }
     }
 
     public static void main(String[] args) {
+        long startTime = System.nanoTime();
         runMultipleTimes();
+        long endTime = System.nanoTime();
+
+        System.out.println("Time elapsed: " + (endTime - startTime)/100000000.0);
+        System.out.println("Nodes visited: " + ConstraintSatisfactionProblem.nodeVisitCounter++);
 
     }
 }

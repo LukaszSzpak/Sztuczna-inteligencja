@@ -7,6 +7,7 @@ public class ConstraintSatisfactionProblem<V, D> {
     private final Map<V, List<Constraint<V, D>>> constraints;
     private final static String VALUE_HEURISTIC = "first"; //[first, mostEdges]
     private final static String DOMAIN_HEURISTIC = "random"; //[random, leastUsed]
+    public static long nodeVisitCounter = 0;
 
 
     public ConstraintSatisfactionProblem(List<V> variables, Map<V, List<D>> domains) {
@@ -53,6 +54,7 @@ public class ConstraintSatisfactionProblem<V, D> {
         if (valuesList.isEmpty())
             return null;
 
+        ConstraintSatisfactionProblem.nodeVisitCounter++;
         assignment.put(unassigned, valuesList.get(0));
         return forwardCheckingSearch(assignment);
     }
@@ -79,6 +81,7 @@ public class ConstraintSatisfactionProblem<V, D> {
         }
 
         V unassigned = getNextUnassignedVariable(assignment);
+        ConstraintSatisfactionProblem.nodeVisitCounter++;
         for (D value : getValuesList(domains.get(unassigned), assignment)) {
             Map<V, D> localAssignment = new HashMap<>(assignment);
             localAssignment.put(unassigned, value);
