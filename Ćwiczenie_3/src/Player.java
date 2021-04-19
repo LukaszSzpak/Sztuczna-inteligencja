@@ -36,9 +36,9 @@ abstract class Player {
 
     public boolean checkAllFieldsEmpty() {
         for (Field field : this.fieldList)
-            if (field.isEmpty())
-                return true;
-        return false;
+            if (!field.isEmpty())
+                return false;
+        return true;
     }
 
     public int getNumberOfStonesFromFieldNumber(int fieldNumber) {
