@@ -5,4 +5,6 @@ public interface Player {
     void initializePlayer();
     int move();
     int getWellScore();
+    int getFieldsScore();
+    int getSummaryScore();
 }
