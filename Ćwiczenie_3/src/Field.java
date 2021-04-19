@@ -18,4 +18,8 @@ public class Field {
         this.stonesCounter = 0;
         return temp;
     }
+
+    public boolean isEmpty() {
+        return this.stonesCounter == 0;
+    }
 }

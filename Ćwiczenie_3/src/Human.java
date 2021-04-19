@@ -1,21 +1,9 @@
-import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-public class Human implements Player{
-    private List<Field> fieldList;
-    private Well well;
+public class Human extends Player{
 
     public Human() {
-    }
-
-    @Override
-    public void initializePlayer() {
-        this.well = new Well();
-        fieldList = Stream.generate(Field::new)
-                .limit(NUMBER_OF_FIELDS)
-                .collect(Collectors.toList());
+        super();
     }
 
     @Override
@@ -24,20 +12,4 @@ public class Human implements Player{
         return new Scanner(System.in).nextInt();
     }
 
-    @Override
-    public int getWellScore() {
-        return this.well.getScore();
-    }
-
-    @Override
-    public int getFieldsScore() {
-        return this.fieldList.stream()
-                .mapToInt(Field::getNumberOfStones)
-                .sum();
-    }
-
-    @Override
-    public int getSummaryScore() {
-        return this.getFieldsScore() + this.getWellScore();
-    }
 }
