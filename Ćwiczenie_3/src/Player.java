@@ -7,7 +7,7 @@ abstract class Player {
     static final int NUMBER_OF_FIELDS = 6;
     protected List<Field> fieldList;
     protected Well well;
-    String name;
+    protected String name;
 
     public Player(String name) {
         this.name = name;

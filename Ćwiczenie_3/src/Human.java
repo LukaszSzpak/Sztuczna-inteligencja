@@ -8,7 +8,8 @@ public class Human extends Player{
 
     @Override
     public int move() {
-        System.out.print("Enter next field number (0-5)");
+        System.out.println("Turn: " + this.name);
+        System.out.println("Enter next field number (0-5)");
         return new Scanner(System.in).nextInt();
     }
 
