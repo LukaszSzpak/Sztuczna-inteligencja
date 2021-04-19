@@ -2,7 +2,7 @@ public class Field {
     private int stonesCounter;
 
     public Field() {
-        this.stonesCounter = 0;
+        this.stonesCounter = Player.NUMBER_OF_STONES;
     }
 
     public void addStone() {
