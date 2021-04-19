@@ -19,6 +19,7 @@ public class Mancala {
     public void nextMove() {
         int fieldNumber = actPlayer.move();
         int stonesCounter = actPlayer.getNumberOfStonesFromFieldNumberAndErase(fieldNumber);
+        Player lastMovePlayer = this.actPlayer;
         Player stonesPlayer = this.actPlayer;
 
 
@@ -37,7 +38,9 @@ public class Mancala {
             stonesCounter--;
         }
 
-        this.actPlayer = getAnotherPlayer(this.actPlayer);
+        if (!(stonesPlayer == lastMovePlayer && stonesCounter == 0))
+            this.actPlayer = getAnotherPlayer(this.actPlayer);
+
     }
 
     private Player getAnotherPlayer(Player actPlayer) {
