@@ -57,6 +57,10 @@ abstract class Player {
         this.well.addStone();
     }
 
+    public void addStonesToWall(int numberOfStones) {
+        this.well.addStones(numberOfStones);
+    }
+
     abstract int move();
 
 }

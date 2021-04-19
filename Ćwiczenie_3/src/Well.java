@@ -9,6 +9,10 @@ public class Well {
         this.stonesCounter++;
     }
 
+    public void addStones(int numberOfStones) {
+        this.stonesCounter += numberOfStones;
+    }
+
     public int getScore() {
         return this.stonesCounter;
     }
