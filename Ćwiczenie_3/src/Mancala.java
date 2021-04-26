@@ -102,4 +102,11 @@ public class Mancala {
             System.out.print(this.playerB.getNumberOfStonesFromFieldNumber(i) + "\t");
         System.out.println("\n\n");
     }
+
+    public void printEndGameStats() {
+        System.out.println("\n----------------------------------");
+        System.out.println("End game stats: ");
+        System.out.println("Player A: " + this.playerA.getSummaryScore());
+        System.out.println("Player B: " + this.playerB.getSummaryScore());
+    }
 }
