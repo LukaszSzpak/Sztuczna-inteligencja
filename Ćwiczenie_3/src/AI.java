@@ -27,7 +27,7 @@ public class AI extends Player {
     }
 
     private int minMaxAlgorithm(Mancala mancala) throws NoSuchMethodException {
-        int bestScore = Integer.MIN_VALUE;
+        double bestScore = Integer.MIN_VALUE;
         int bestFieldIndex = -1;
 
         for (Field field : this.getNoneEmptyFields()) {
@@ -35,8 +35,8 @@ public class AI extends Player {
             AI ai = new AI(this);
             myMancala.nextMove(Optional.of(this.fieldList.indexOf(field)));
 
-            int score = ai.getSummaryScore();
-            int opponentScore = myMancala.getAnotherPlayer(ai).getSummaryScore();
+            double score = ai.boardScoreForMinMax();
+            double opponentScore = myMancala.getAnotherPlayer(ai).boardScoreForMinMax();
             if (score - opponentScore > bestScore) {
                 bestScore = score - opponentScore;
                 bestFieldIndex = this.fieldList.indexOf(field);
@@ -54,4 +54,5 @@ public class AI extends Player {
         Collections.shuffle(resultList);
         return resultList;
     }
+
 }

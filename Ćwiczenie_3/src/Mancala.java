@@ -44,6 +44,7 @@ public class Mancala {
 
         int stonesCounter = actPlayer.getNumberOfStonesFromFieldNumberAndErase(fieldNumber);
         Player stonesPlayer = this.actPlayer;
+        Player movePlayer = this.actPlayer;
         boolean canBePlayerChange = true;
         boolean addedToWell = false;
 
@@ -62,7 +63,9 @@ public class Mancala {
                 fieldNumber = 0;
             }
 
-            if (stonesCounter == 1 && stonesPlayer.getNumberOfStonesFromFieldNumber(fieldNumber) == 0) {
+            if (stonesCounter == 1 &&
+                    stonesPlayer.getNumberOfStonesFromFieldNumber(fieldNumber) == 0 &&
+                    stonesPlayer == movePlayer) {
                 canBePlayerChange = false;
                 stonesPlayer.addStonesToWall(getAnotherPlayer(stonesPlayer).
                         getNumberOfStonesFromFieldNumberAndErase(Player.NUMBER_OF_FIELDS - fieldNumber - 1));

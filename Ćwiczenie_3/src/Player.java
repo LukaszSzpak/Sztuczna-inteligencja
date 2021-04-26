@@ -7,6 +7,8 @@ import java.util.stream.Stream;
 abstract class Player {
     static final int NUMBER_OF_STONES = 4;
     static final int NUMBER_OF_FIELDS = 6;
+    static final double WELL_MULTIPLIER = 2.0;
+    static final double FIELDS_MULTIPLIER = 0.5;
     protected List<Field> fieldList;
     protected Well well;
     protected String name;
@@ -70,6 +72,10 @@ abstract class Player {
 
     public void addStonesToWall(int numberOfStones) {
         this.well.addStones(numberOfStones);
+    }
+
+    protected double boardScoreForMinMax() {
+        return (this.getFieldsScore() * FIELDS_MULTIPLIER) + (this.getWellScore() * WELL_MULTIPLIER);
     }
 
     abstract int move(Mancala mancala) throws NoSuchMethodException;
