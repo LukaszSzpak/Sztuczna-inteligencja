@@ -5,6 +5,10 @@ public class Field {
         this.stonesCounter = Player.NUMBER_OF_STONES;
     }
 
+    public Field(Field field) {
+        this.stonesCounter = field.stonesCounter;
+    }
+
     public void addStone() {
         this.stonesCounter++;
     }

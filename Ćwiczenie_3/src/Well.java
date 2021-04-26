@@ -5,6 +5,10 @@ public class Well {
         this.stonesCounter = 0;
     }
 
+    public Well(Well well) {
+        this.stonesCounter = well.stonesCounter;
+    }
+
     public void addStone() {
         this.stonesCounter++;
     }

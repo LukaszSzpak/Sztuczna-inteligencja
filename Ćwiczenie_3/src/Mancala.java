@@ -1,3 +1,5 @@
+import java.util.Optional;
+
 public class Mancala {
     private Player playerA;
     private Player playerB;
@@ -13,29 +15,48 @@ public class Mancala {
     }
 
     public Mancala(Mancala mancalaToCopy) {
-        this.playerA = mancalaToCopy.playerA;
-        this.playerB = mancalaToCopy.playerB;
-        this.actPlayer = mancalaToCopy.actPlayer;
+        if (mancalaToCopy.playerA instanceof AI)
+            this.playerA = new AI((AI) mancalaToCopy.playerA);
+        else
+            this.playerA = new Human((Human) mancalaToCopy.playerA);
+
+        if (mancalaToCopy.playerB instanceof AI)
+            this.playerB = new AI((AI) mancalaToCopy.playerB);
+        else
+            this.playerB = new Human((Human) mancalaToCopy.playerB);
+
+        if (mancalaToCopy.actPlayer == mancalaToCopy.playerA)
+            this.actPlayer = this.playerA;
+        else
+            this.actPlayer = this.playerB;
     }
 
     public boolean theEndOfGame() {
         return this.playerA.checkAllFieldsEmpty() || this.playerB.checkAllFieldsEmpty();
     }
 
-    public void nextMove() {
-        int fieldNumber = actPlayer.move();
+    public void nextMove(Optional<Integer> optMove) throws NoSuchMethodException {
+        int fieldNumber;
+        if (optMove.isPresent())
+            fieldNumber = optMove.get();
+        else
+            fieldNumber = actPlayer.move(this);
+
         int stonesCounter = actPlayer.getNumberOfStonesFromFieldNumberAndErase(fieldNumber);
-        Player lastMovePlayer = this.actPlayer;
         Player stonesPlayer = this.actPlayer;
         boolean canBePlayerChange = true;
+        boolean addedToWell = false;
 
 
         while (stonesCounter > 0) {
             fieldNumber++;
+            addedToWell = false;
+
             if (fieldNumber >= Player.NUMBER_OF_FIELDS) {
                 if (stonesPlayer == this.actPlayer) {
                     this.actPlayer.addStoneToWell();
                     stonesCounter--;
+                    addedToWell = true;
                 }
                 stonesPlayer = getAnotherPlayer(stonesPlayer);
                 fieldNumber = 0;
@@ -47,16 +68,20 @@ public class Mancala {
                         getNumberOfStonesFromFieldNumberAndErase(Player.NUMBER_OF_FIELDS - fieldNumber - 1));
             }
 
-            stonesPlayer.addStoneToField(fieldNumber);
-            stonesCounter--;
+            if (stonesCounter > 0) {
+                stonesPlayer.addStoneToField(fieldNumber);
+                stonesCounter--;
+                addedToWell = false;
+            }
+
         }
 
-        if (canBePlayerChange && !(stonesPlayer == lastMovePlayer && stonesCounter == 0))
+        if (canBePlayerChange && !addedToWell)
             this.actPlayer = getAnotherPlayer(this.actPlayer);
 
     }
 
-    private Player getAnotherPlayer(Player actPlayer) {
+    public Player getAnotherPlayer(Player actPlayer) {
         return actPlayer == this.playerA ? this.playerB : this.playerA;
     }
 
@@ -72,6 +97,6 @@ public class Mancala {
         System.out.print(this.playerB.getWellScore() + "\n\t");
         for (int i = 0; i < Player.NUMBER_OF_FIELDS; i++)
             System.out.print(this.playerB.getNumberOfStonesFromFieldNumber(i) + "\t");
-        System.out.println("");
+        System.out.println("\n\n");
     }
 }

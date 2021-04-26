@@ -1,3 +1,5 @@
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -11,6 +13,15 @@ abstract class Player {
 
     public Player(String name) {
         this.name = name;
+    }
+
+    public Player(Player player) {
+        this.fieldList = new LinkedList<>();
+        for (Field field : player.fieldList)
+            this.fieldList.add(new Field(field));
+
+        this.well = new Well(player.well);
+        this.name = player.name;
     }
 
     void initializePlayer() {
@@ -61,6 +72,6 @@ abstract class Player {
         this.well.addStones(numberOfStones);
     }
 
-    abstract int move();
+    abstract int move(Mancala mancala) throws NoSuchMethodException;
 
 }
