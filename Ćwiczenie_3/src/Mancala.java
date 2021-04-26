@@ -79,7 +79,7 @@ public class Mancala {
 
         }
 
-        if (mustBePlayerChange || addedToWell)
+        if (mustBePlayerChange || !addedToWell)
             this.actPlayer = getAnotherPlayer(this.actPlayer);
 
     }
