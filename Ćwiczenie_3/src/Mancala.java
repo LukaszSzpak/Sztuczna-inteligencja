@@ -12,6 +12,12 @@ public class Mancala {
         this.actPlayer = this.playerA;
     }
 
+    public Mancala(Mancala mancalaToCopy) {
+        this.playerA = mancalaToCopy.playerA;
+        this.playerB = mancalaToCopy.playerB;
+        this.actPlayer = mancalaToCopy.actPlayer;
+    }
+
     public boolean theEndOfGame() {
         return this.playerA.checkAllFieldsEmpty() || this.playerB.checkAllFieldsEmpty();
     }
