@@ -13,8 +13,8 @@ public class AI extends Player {
     private String algorithm; //[min-max, ...]
     private int maxDepth;
 
-    public AI(String name, String algorithm, int treeDepth) {
-        super(name);
+    public AI(String name, Analysis analyzer, String algorithm, int treeDepth) {
+        super(name, analyzer);
         this.algorithm = algorithm;
         this.maxDepth = treeDepth * 2;
     }
@@ -71,6 +71,7 @@ public class AI extends Player {
         if (actDepth >= this.maxDepth || this.getNoneEmptyFields().isEmpty()) {
             return this.getOpponentMinusMeScore(mancala, (AI) mancala.getPlayerByName(this));
         }
+        analyzer.addMove();
 
         List<Double> scoreList = new LinkedList<>();
         for (Field field : this.getNoneEmptyFields()) {
@@ -85,6 +86,7 @@ public class AI extends Player {
         if (actDepth >= this.maxDepth || this.getNoneEmptyFields().isEmpty()) {
             return this.getOpponentMinusMeScore(mancala, (AI) mancala.getPlayerByName(this));
         }
+        analyzer.addMove();
 
         List<Double> scoreList = new LinkedList<>();
         for (Field field : this.getNoneEmptyFields()) {
@@ -99,7 +101,6 @@ public class AI extends Player {
 
             if (alpha >= beta)
                 return this.getOpponentMinusMeScore(mancala, (AI) mancala.getPlayerByName(this));
-
             scoreList.add(score);
         }
         return Collections.max(scoreList);

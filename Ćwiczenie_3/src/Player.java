@@ -12,9 +12,11 @@ abstract class Player {
     protected List<Field> fieldList;
     protected Well well;
     protected String name;
+    protected Analysis analyzer;
 
-    public Player(String name) {
+    public Player(String name, Analysis analyzer) {
         this.name = name;
+        this.analyzer = analyzer;
     }
 
     public Player(Player player) {
