@@ -109,4 +109,10 @@ public class Mancala {
         System.out.println("Player A: " + this.playerA.getSummaryScore());
         System.out.println("Player B: " + this.playerB.getSummaryScore());
     }
+
+    public Player getPlayerByName(Player player) {
+        if (player.name.equals(this.playerA.name))
+            return this.playerA;
+        return this.playerB;
+    }
 }
