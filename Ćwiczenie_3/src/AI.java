@@ -69,7 +69,9 @@ public class AI extends Player {
 
     private double getMinMaxBestMove(Mancala mancala, int actDepth) throws NoSuchMethodException {
         if (actDepth >= this.maxDepth || this.getNoneEmptyFields().isEmpty()) {
-            return this.getOpponentMinusMeScore(mancala, (AI) mancala.getPlayerByName(this));
+            if (actDepth % 2 == 0)
+                return this.getOpponentMinusMeScore(mancala, (AI) mancala.getPlayerByName(this));
+            return 0;
         }
         analyzer.addMove();
 
@@ -84,7 +86,9 @@ public class AI extends Player {
 
     private double getAlphaBetaBestMove(Mancala mancala, int actDepth, double alpha, double beta) throws NoSuchMethodException {
         if (actDepth >= this.maxDepth || this.getNoneEmptyFields().isEmpty()) {
-            return this.getOpponentMinusMeScore(mancala, (AI) mancala.getPlayerByName(this));
+            if (actDepth % 2 == 0)
+                return this.getOpponentMinusMeScore(mancala, (AI) mancala.getPlayerByName(this));
+            return 0;
         }
         analyzer.addMove();
 
