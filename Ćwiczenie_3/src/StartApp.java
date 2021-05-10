@@ -6,8 +6,8 @@ public class StartApp {
         Analysis analyzer2 = new Analysis();
 
         Mancala mancala = new Mancala(
-                new AI("AI1", analyzer1, "alpha-beta", 4),
-                new AI("AI2", analyzer2, "min-max", 4));
+                new AI("AI1", analyzer1, "alpha-beta", 2, 0),
+                new AI("AI2", analyzer2, "min-max", 2, 0));
         mancala.printGame();
 
         while (!mancala.theEndOfGame()) {

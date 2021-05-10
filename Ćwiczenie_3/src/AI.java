@@ -11,12 +11,14 @@ import static jdk.nashorn.internal.objects.NativeMath.max;
 
 public class AI extends Player {
     private String algorithm; //[min-max, ...]
+    private int evaluationFunction; //[1, 2, ...]
     private int maxDepth;
 
-    public AI(String name, Analysis analyzer, String algorithm, int treeDepth) {
+    public AI(String name, Analysis analyzer, String algorithm, int treeDepth, int evaluationFunction) {
         super(name, analyzer);
         this.algorithm = algorithm;
         this.maxDepth = treeDepth * 2;
+        this.evaluationFunction = evaluationFunction;
     }
 
     public AI(AI ai) {
@@ -110,11 +112,13 @@ public class AI extends Player {
         return Collections.max(scoreList);
     }
 
-    private double getOpponentMinusMeScore(Mancala mancala, AI ai) {
-        double score = ai.boardScoreForMinMax();
-        double opponentScore = mancala.getAnotherPlayer(ai).boardScoreForMinMax();
-
-        return score - opponentScore;
+    private double getOpponentMinusMeScore(Mancala mancala, AI ai) throws NoSuchMethodException {
+        switch (this.evaluationFunction) {
+            case 0: return ai.boardScoreForMinMax() - mancala.getAnotherPlayer(ai).boardScoreForMinMax();
+            case 1: return ai.getSummaryScore() - mancala.getAnotherPlayer(ai).getSummaryScore();
+            case 2: return ai.getWellScore() - mancala.getAnotherPlayer(ai).getWellScore();
+        }
+        throw new NoSuchMethodException("Wrong heuristic!");
     }
 
     private List<Field> getNoneEmptyFields() {
