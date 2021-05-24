@@ -36,4 +36,24 @@ public class Review {
     public void setSubj(String subj) {
         this.subj = subj;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getLabel3() {
+        return label3;
+    }
+
+    public int getLabel4() {
+        return label4;
+    }
+
+    public float getRating() {
+        return rating;
+    }
+
+    public String getSubj() {
+        return subj;
+    }
 }

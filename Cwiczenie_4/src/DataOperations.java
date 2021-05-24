@@ -11,7 +11,6 @@ public class DataOperations {
     private String[] names;
     private List<Pair<String, List<Review>>> reviewList;
     private final String path = "/Users/lukasz/Desktop/studia/Sztuczna_intel/Cwiczenie_4/scale_data/scaledata/";
-    private final String arffFilePath = "/Users/lukasz/Desktop/studia/Sztuczna_intel/Cwiczenie_4/data.arff";
     private final String[] fileNames = new String[]{"id", "label.3class", "label.4class", "rating", "subj"};
 
     public DataOperations(String[] names) {
@@ -46,4 +45,7 @@ public class DataOperations {
         }
     }
 
+    public List<Pair<String, List<Review>>> getReviewList() {
+        return reviewList;
+    }
 }
