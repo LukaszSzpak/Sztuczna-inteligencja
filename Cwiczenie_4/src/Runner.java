@@ -1,6 +1,5 @@
 import java.io.FileNotFoundException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Runner {
     public static void main(String[] args) throws FileNotFoundException {
@@ -13,23 +12,12 @@ public class Runner {
 
         DataOperations dataOperations = new DataOperations(names);
         dataOperations.readData();
+        List<Review> reviews = dataOperations.getReviewList().get(0).getValue();
 
-        List<Map<String, Integer>> resultList = new LinkedList<>();
-        Map<String, Integer> sumMap = new HashMap<>();
-        for (Review review : dataOperations.getReviewList().get(0).getValue()) {
-            Map<String, Integer> tempMap = Process.transformStringToWordMap(review.getSubj());
-            resultList.add(tempMap);
-            Map<String, Integer> finalSumMap = sumMap;
-            tempMap.forEach((k, v) -> finalSumMap.merge(k, v, Integer::sum));
-        }
-
-
-        //System.out.println(resultList);
-        sumMap = sumMap.entrySet().stream()
-                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new)
-                );
-        System.out.println(sumMap);
+        Map<String, Integer> resultMap = Process.getWordCountMap(reviews);
+        System.out.println("Words map: \n" + resultMap);
+        System.out.println("\nLabel3 count: " + Process.getLabel3Count(reviews));
+        System.out.println("Most popular word: " + new ArrayList<>(resultMap.entrySet()).get(0));
+        Process.saveToArffFile(reviews, new LinkedList<>(resultMap.keySet()));
     }
 }

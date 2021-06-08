@@ -1,3 +1,5 @@
+import java.util.List;
+
 public class Review {
     private int id;
     private int label3;
@@ -55,5 +57,17 @@ public class Review {
 
     public String getSubj() {
         return subj;
+    }
+
+    public String myToString(List<String> words) {
+        StringBuilder sb = new StringBuilder();
+        String delimiters = "\\s+|,\\s*|\\.\\s*";
+        String[] wordArray = subj.split(delimiters);
+
+        for (String word : wordArray) {
+            if (word.length() > 1)
+                sb.append(words.indexOf(word)).append(", ").append(this.label3).append(", ").append(this.rating).append("\n");
+        }
+        return sb.toString();
     }
 }
